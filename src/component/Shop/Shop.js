@@ -1,17 +1,20 @@
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { addToDb, getStoredCart } from '../../utilities/fakedb';
+import { Link, useLoaderData } from 'react-router-dom';
+import { addToDb, deleteShoppingCart, getStoredCart } from '../../utilities/fakedb';
 import Cart from '../Cart/Cart';
 import Product from '../Product/Product';
 import './Shop.css'
 const Shop = () => {
     const [cart, setCart] = useState([]);
-    const [products, setProducts] = useState([]);
-    useEffect(() => {
-        fetch('products.json')
-            .then(res => res.json())
-            .then(data => setProducts(data))
-    }, []);
+    const products = useLoaderData();
+
+    const clearCart = () => {
+        setCart([]);
+        deleteShoppingCart();
+    }
 
     const handelAddToCart = (selectProduct) => {
         let newCart = [];
@@ -54,7 +57,9 @@ const Shop = () => {
                 }
             </div>
             <div className='bg-zinc-100	drop-shadow-lg'>
-                <Cart cart={cart}></Cart>
+                <Cart cart={cart} clearCart={clearCart}>
+                    <Link to='/order'><button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full py-2.5 my-4 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Order Review <FontAwesomeIcon icon={faShoppingCart} /></button></Link>
+                </Cart>
             </div>
         </div>
     );
