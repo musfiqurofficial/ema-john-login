@@ -1,11 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import './App.css';
+import ErrorPage from './component/ErrorPage';
 import Inventory from './component/Inventory/Inventory';
 import Main from './component/Layout/Main';
 import Login from './component/Login/Login';
 import Order from './component/Order/Order';
 import OrderReview from './component/OrderReview/OrderReview';
+import PrivateRouter from './component/PrivateRouter/PrivateRouter';
+import Shipping from './component/Shipping/Shipping';
 import Shop from './component/Shop/Shop';
+import SignUp from './component/SignUp/SignUp';
 import { productsAndCartLoader } from './loaders/ProductAndCartLoader';
 
 function App() {
@@ -13,6 +17,7 @@ function App() {
     {
       path: '/',
       element: <Main></Main>,
+      errorElement: <ErrorPage></ErrorPage>,
       children: [
         {
           path: '/',
@@ -25,8 +30,12 @@ function App() {
           element: <Order></Order>
         },
         {
+          path: '/shipping',
+          element: <PrivateRouter><Shipping></Shipping></PrivateRouter>
+        },
+        {
           path: '/inventory',
-          element: <Inventory></Inventory>
+          element: <PrivateRouter><Inventory></Inventory></PrivateRouter>
         },
         {
           path: '/review',
@@ -35,6 +44,10 @@ function App() {
         {
           path: '/login',
           element: <Login></Login>
+        },
+        {
+          path: '/signUp',
+          element: <SignUp></SignUp>
         },
       ]
     },

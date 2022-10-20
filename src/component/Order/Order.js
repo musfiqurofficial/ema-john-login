@@ -35,7 +35,9 @@ const Order = () => {
                 }
             </div>
             <div className='bg-zinc-100	drop-shadow-lg'>
-                <Cart cart={cart} clearCart={clearCart}></Cart>
+                <Cart cart={cart} clearCart={clearCart}>
+                    <Link to='/shipping'><button className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full py-2.5 mt-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Proceed Shipping</button></Link>
+                </Cart>
             </div>
         </div>
     );

@@ -1,51 +1,63 @@
 import React from 'react';
 import { useContext } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { AuthContext } from '../Context/UserContext';
 
-const Login = () => {
-    const { login } = useContext(AuthContext)
-    const navigate = useNavigate();
-    const location = useLocation();
-    const from = location.state?.from?.pathname || '/'
+const SignUp = () => {
+    const [error, setError] = useState()
+    const { createUser } = useContext(AuthContext)
 
     const handleSubmit = e => {
         e.preventDefault();
         const form = e.target;
         const email = form.email.value;
         const password = form.password.value;
-        console.log(email, password)
+        const confirm = form.confirm_password.value;
+        console.log(email, password, confirm)
 
-        login(email, password)
+        if (password.length < 6) {
+            setError('Password should be 6 characters or more!')
+        }
+
+        if (password !== confirm) {
+            setError("Your Password did not match!")
+            return;
+        }
+
+        createUser(email, password)
             .then(result => {
                 const user = result.user;
-                form.reset();
                 console.log(user);
-                navigate(from, { replace: true })
+                form.reset();
             }).catch(error => console.error(error))
-
     }
+
     return (
         <div className='w-full my-10'>
             <div className="w-9/12 mx-auto max-w-md p-8 space-y-3 rounded-xl dark:bg-gray-800 dark:text-gray-100">
-                <h1 className="text-2xl font-bold text-center">Login</h1>
-                <form onSubmit={handleSubmit} className="space-y-6 ng-untouched ng-pristine ng-valid">
+                <h1 className="text-2xl font-bold text-center">Sign Up</h1>
+
+                <form onSubmit={handleSubmit} type="submit" className="space-y-6 ng-untouched ng-pristine ng-valid">
                     <div className="space-y-1 text-sm">
                         <label htmlFor="email" className="block dark:text-gray-400">Email</label>
-                        <input type="text" name="email" placeholder="Your Email" className="w-full px-4 py-3 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-900 focus:dark:border-violet-400" required />
+                        <input type="email" name="email" placeholder="Your Email" className="w-full px-4 py-3 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-900 focus:dark:border-violet-400" required />
                     </div>
                     <div className="space-y-1 text-sm">
-                        <label htmlFor="password" className="block dark:text-gray-900">Password</label>
+                        <label htmlFor="password" className="block dark:text-gray-400">Password</label>
                         <input type="password" name="password" placeholder="Password" className="w-full px-4 py-3 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-900 focus:dark:border-violet-400" required />
-                        <div className="flex justify-end text-xs dark:text-gray-400">
-                            <Link rel="noopener noreferrer" to="">Forgot Password?</Link>
-                        </div>
                     </div>
-                    <button className="block w-full p-3 text-center rounded-sm dark:text-gray-900 dark:bg-amber-500">Login</button>
+                    <div className="space-y-1 text-sm">
+                        <label htmlFor="confirm_password" className="block dark:text-gray-400">Confirm Password</label>
+                        <input type="password" name="confirm_password" placeholder="Confirm Password" className="w-full px-4 py-3 rounded-md dark:border-gray-700 dark:bg-gray-900 dark:text-gray-900 focus:dark:border-violet-400" required />
+                        <p className='text-xs text-red-500'>{error}</p>
+                    </div>
+                    <button className="block w-full p-3 text-center rounded-sm dark:text-gray-900 dark:bg-amber-500 mt-8">Sign Up</button>
                 </form>
+
                 <div className="flex items-center pt-4 space-x-1">
                     <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
-                    <p className="px-3 text-sm dark:text-gray-400">Login with social accounts</p>
+                    <p className="px-3 text-sm dark:text-gray-400">Sign Up with social accounts</p>
                     <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
                 </div>
                 <div className="flex justify-center space-x-4">
@@ -65,12 +77,12 @@ const Login = () => {
                         </svg>
                     </button> </Link>
                 </div>
-                <p className="text-xs text-center sm:px-6 dark:text-gray-400">Don't have an account?
-                    <Link rel="noopener noreferrer" to="/login" className="underline dark:text-gray-100">Sign up</Link>
+                <p className="text-xs text-center sm:px-6 dark:text-gray-400">Already have an account?
+                    <Link rel="noopener noreferrer" to="/login" className="underline dark:text-gray-100">Login</Link>
                 </p>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default SignUp;

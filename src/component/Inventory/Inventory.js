@@ -1,11 +1,15 @@
 import React from 'react';
+import { useContext } from 'react';
+import { AuthContext } from '../Context/UserContext';
 
 const Inventory = () => {
+    const { user } = useContext(AuthContext);
     return (
         <div>
-            <h1 className='text-2xl font-bold'>This is Our Inventory page</h1>
+            <span>Owner of this Shop: {user?.displayName}</span><br />
+            <span>Owner of this Shop: {user?.email}</span>
         </div>
     );
 };
 
-export default Inventory;<h1>This is Our Inventory page</h1>
+export default Inventory; <h1>This is Our Inventory page</h1>
